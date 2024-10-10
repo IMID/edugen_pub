@@ -11,7 +11,8 @@ ARG JUPYTER_KERNEL_NAME=omics-genomika \
     BWA_VERSION=0.7.18 \
     PYTHON_VERSION=3.9 \
     HTSLIB_VERSION=1.21 \
-    BEDTOOLS_VERSION=2.31.1
+    BEDTOOLS_VERSION=2.31.1 \
+    GATK_VERSION=4.6.0.0
 
 # Install packages
 USER root
@@ -104,6 +105,12 @@ ENV PATH="/opt/FastQC/:${PATH}"
 
 # Install MultiQC
 RUN pip install multiqc==1.25.1
+
+# Install GATK
+RUN wget https://github.com/broadinstitute/gatk/releases/download/$GATK_VERSION/gatk-$GATK_VERSION.zip && \
+    unzip gatk-$GATK_VERSION.zip && \
+    mv /tmp/gatk-$GATK_VERSION /opt/gatk
+ENV PATH="/opt/gatk/:${PATH}"
 
 # Clean-up
 RUN rm -rf /tmp/*
